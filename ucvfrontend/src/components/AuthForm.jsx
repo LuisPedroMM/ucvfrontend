@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/icta.png"; // Asegúrate de tener este logo en assets
+import logo from "../assets/icta.png"; // Asegúrate de tener el logo en assets
 
 const AuthForm = ({ isLogin }) => {
   const [email, setEmail] = useState("");
@@ -62,6 +62,15 @@ const AuthForm = ({ isLogin }) => {
               {isLogin ? "Ingresar" : "Crear Cuenta"}
             </button>
           </form>
+
+          {isLogin && (
+            <div className="text-center mt-2">
+              <Link to="/forgot-password" className="text-decoration-none">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+          )}
+
           <p className="text-center mt-3">
             {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes una cuenta?"}{" "}
             <Link to={isLogin ? "/register" : "/login"} className="fw-bold">
