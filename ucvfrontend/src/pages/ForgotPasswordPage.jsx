@@ -6,11 +6,31 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
 
-  const handleResetPassword = (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
-    alert(`Se enviará un correo de recuperación a: ${email}`);
-    // Aquí podrías conectar con el backend para enviar el email de recuperación
+  
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        alert("Correo de recuperación enviado.");
+      } else {
+        alert(data.message || "Error al enviar el correo.");
+      }
+    } catch (error) {
+      alert("Error de conexión con el servidor.");
+      console.error(error);
+    }
   };
+  
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">

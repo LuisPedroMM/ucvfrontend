@@ -14,7 +14,6 @@ const AuthForm = ({ isLogin }) => {
     e.preventDefault();
     setError(null);
 
-    // Validación simple
     if (!email || !password || (!isLogin && !fullName)) {
       setError("Por favor, completa todos los campos.");
       return;
@@ -45,11 +44,11 @@ const AuthForm = ({ isLogin }) => {
       }
 
       if (isLogin) {
-        // Guardar token si se recibió
         if (data.token) {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user)); // ✅ nuevo
           alert("Inicio de sesión exitoso");
-          navigate("/dashboard"); // o la ruta que uses
+          navigate("/dashboard");
         } else {
           setError("No se recibió token del servidor.");
         }
@@ -116,6 +115,12 @@ const AuthForm = ({ isLogin }) => {
               {isLogin ? "Entrar" : "Registrarse"}
             </button>
           </form>
+
+          <div className="mb-3 text-center">
+            <Link to="/forgot-password" className="small">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
 
           <div className="mt-3">
             {isLogin ? (
