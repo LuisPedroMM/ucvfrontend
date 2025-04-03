@@ -1,82 +1,133 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "../assets/icta.png"; // Asegúrate de tener el logo en assets
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/icta.png";
 
 const AuthForm = ({ isLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      console.log("Iniciando sesión con:", email, password);
-    } else {
-      console.log("Registrando usuario:", fullName, email, password);
+    setError(null);
+
+    // Validación simple
+    if (!email || !password || (!isLogin && !fullName)) {
+      setError("Por favor, completa todos los campos.");
+      return;
+    }
+
+    const url = isLogin
+      ? "http://localhost:5000/api/auth/login"
+      : "http://localhost:5000/api/auth/register";
+
+    const payload = isLogin
+      ? { email, password }
+      : { fullName, email, password };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Error en la solicitud.");
+        return;
+      }
+
+      if (isLogin) {
+        // Guardar token si se recibió
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          alert("Inicio de sesión exitoso");
+          navigate("/dashboard"); // o la ruta que uses
+        } else {
+          setError("No se recibió token del servidor.");
+        }
+      } else {
+        alert("Registro exitoso. Ahora puedes iniciar sesión.");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo conectar con el servidor.");
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="text-center">
-        <img src={logo} alt="ICTA Logo" style={{ width: "150px", marginBottom: "20px" }} />
+        <img
+          src={logo}
+          alt="ICTA Logo"
+          style={{ width: "150px", marginBottom: "20px" }}
+        />
         <div className="card p-4 shadow" style={{ width: "22rem" }}>
-          <h3 className="text-center mb-3">{isLogin ? "Login" : "Regístrate"}</h3>
+          <h3 className="text-center mb-3">
+            {isLogin ? "Iniciar sesión" : "Regístrate"}
+          </h3>
+
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <div className="mb-3">
-                <label className="form-label">Nombre Completo</label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Tu Nombre"
+                  placeholder="Nombre completo"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  required
                 />
               </div>
             )}
             <div className="mb-3">
-              <label className="form-label">Correo Electrónico</label>
               <input
                 type="email"
                 className="form-control"
-                placeholder="usuario@ejemplo.com"
+                placeholder="Correo electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Contraseña</label>
               <input
                 type="password"
                 className="form-control"
-                placeholder="••••••••"
+                placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
-            <button type="submit" className="btn btn-dark w-100">
-              {isLogin ? "Ingresar" : "Crear Cuenta"}
+            <button type="submit" className="btn btn-primary w-100">
+              {isLogin ? "Entrar" : "Registrarse"}
             </button>
           </form>
 
-          {isLogin && (
-            <div className="text-center mt-2">
-              <Link to="/forgot-password" className="text-decoration-none">
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-          )}
-
-          <p className="text-center mt-3">
-            {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes una cuenta?"}{" "}
-            <Link to={isLogin ? "/register" : "/login"} className="fw-bold">
-              {isLogin ? "Regístrate" : "Inicia Sesión"}
-            </Link>
-          </p>
+          <div className="mt-3">
+            {isLogin ? (
+              <p>
+                ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
+              </p>
+            ) : (
+              <p>
+                ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
