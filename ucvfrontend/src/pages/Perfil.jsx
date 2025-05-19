@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import defaultAvatar from "../assets/avatar-default.png";
 
 const Perfil = () => {
+  const navigate = useNavigate();
   const usuarioGuardado = JSON.parse(localStorage.getItem("user"));
+
   const [userData, setUserData] = useState({
-    nombre: usuarioGuardado?.nombre || "",
+    nombre: "",
     direccion: "",
     telefono: "",
     notificacionesCorreo: true,
@@ -13,19 +16,27 @@ const Perfil = () => {
 
   const [fotoPerfil, setFotoPerfil] = useState(null);
 
+  useEffect(() => {
+    if (usuarioGuardado) {
+      // Obtener datos del backend si deseas precargarlos desde base
+      setUserData((prev) => ({
+        ...prev,
+        nombre: usuarioGuardado.nombre,
+      }));
+
+      // Construir ruta de foto si existe
+      if (usuarioGuardado.fotoPerfil) {
+        setFotoPerfil(`http://localhost:5000${usuarioGuardado.fotoPerfil}`);
+      }
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setUserData({
       ...userData,
       [name]: type === "checkbox" ? checked : value,
     });
-  };
-
-  const handleFotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFotoPerfil(URL.createObjectURL(file));
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -38,19 +49,43 @@ const Perfil = () => {
         },
         body: JSON.stringify(userData),
       });
-  
-      const data = await res.json();
+
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : {};
       if (!res.ok) throw new Error(data.message || "Error al actualizar");
-  
       alert("✅ Cambios guardados en la base de datos.");
     } catch (err) {
       alert("❌ Error: " + err.message);
     }
   };
 
+  const handleFotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("fotoPerfil", file);
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/auth/usuarios/${usuarioGuardado.id}/foto`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setFotoPerfil("http://localhost:5000" + data.ruta);
+        alert("✅ Foto actualizada");
+      } else {
+        alert("❌ Error al subir imagen: " + data.message);
+      }
+    } catch (err) {
+      alert("❌ Error de red al subir imagen");
+    }
+  };
+
   const cambiarContraseña = () => {
-    alert("Redirigir a formulario de cambio de contraseña");
-    // Aquí podrías abrir un modal o redirigir a una vista
+    navigate("/cambiar-contraseña");
   };
 
   return (
@@ -68,7 +103,7 @@ const Perfil = () => {
           <div className="ms-3">
             <label className="form-label">
               Cambiar foto de perfil:
-              <input type="file" accept="image/*" onChange={handleFotoChange} className="form-control mt-1" />
+              <input type="file" accept="image/*" onChange={handleFotoUpload} className="form-control mt-1" />
             </label>
           </div>
         </div>
