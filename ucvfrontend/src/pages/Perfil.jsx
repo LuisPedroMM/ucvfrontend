@@ -22,6 +22,7 @@ const Perfil = () => {
       setUserData((prev) => ({
         ...prev,
         nombre: usuarioGuardado.nombre,
+        
       }));
 
       // Construir ruta de foto si existe
@@ -88,6 +89,45 @@ const Perfil = () => {
     navigate("/cambiar-contraseña");
   };
 
+  const handleGuardarCambios = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const res = await fetch(`http://localhost:5000/api/auth/usuarios/${usuarioGuardado.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: fullName,
+          direccion: direccion,
+          telefono: telefono,
+          notificacionesCorreo: notificarCorreo,
+          notificacionesSistema: notificarSistema,
+        }),
+      });
+  
+      const contentType = res.headers.get("content-type");
+  
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("❌ Error al guardar perfil:", text);
+        alert("Error al guardar los cambios.");
+        return;
+      }
+  
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        alert(data.message || "Cambios guardados correctamente.");
+      } else {
+        alert("Respuesta inesperada del servidor.");
+      }
+    } catch (error) {
+      console.error("❌ Error de red:", error);
+      alert("Ocurrió un error al intentar guardar.");
+    }
+  };
+
   return (
     <div className="container mt-5">
       <div className="card shadow p-4">
@@ -98,7 +138,7 @@ const Perfil = () => {
             src={fotoPerfil || defaultAvatar}
             alt="Foto de perfil"
             className="rounded-circle"
-            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+            style={{ width: "100px", height: "100px", objectFit: "cover", border: "2px solid #ccc" }}
           />
           <div className="ms-3">
             <label className="form-label">
@@ -167,8 +207,8 @@ const Perfil = () => {
           </div>
 
           <div className="d-flex justify-content-between">
-            <button type="submit" className="btn btn-success">
-              💾 Guardar cambios
+          <button className="btn btn-success" onClick={handleGuardarCambios}>
+            💾 Guardar cambios
             </button>
             <button type="button" className="btn btn-warning" onClick={cambiarContraseña}>
               🔐 Cambiar contraseña
