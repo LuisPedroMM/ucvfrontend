@@ -19,7 +19,7 @@ const NavBar = () => {
           style={{ cursor: "pointer" }}
           onClick={() => navigate("/dashboard")}
         >
-          📘 ICTA - Sistema
+          📘 UCV - Sistema
         </span>
 
         {user && (

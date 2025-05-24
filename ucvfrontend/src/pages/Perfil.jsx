@@ -17,18 +17,30 @@ const Perfil = () => {
   const [fotoPerfil, setFotoPerfil] = useState(null);
 
   useEffect(() => {
-    if (usuarioGuardado) {
-      // Obtener datos del backend si deseas precargarlos desde base
-      setUserData((prev) => ({
-        ...prev,
-        nombre: usuarioGuardado.nombre,
-        
-      }));
+    const cargarDatos = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/auth/usuarios/${usuarioGuardado.id}`);
+        const data = await res.json();
 
-      // Construir ruta de foto si existe
-      if (usuarioGuardado.fotoPerfil) {
-        setFotoPerfil(`http://localhost:5000${usuarioGuardado.fotoPerfil}`);
+        setUserData({
+          nombre: data.Nomb_Usuario || "",
+          direccion: data.Direccion || "",
+          telefono: data.Telefono || "",
+          notificacionesCorreo: !!data.Notif_Correo,
+          notificacionesSistema: !!data.Notif_Sistema,
+        });
+
+        if (data.Foto_Perfil) {
+          setFotoPerfil(`http://localhost:5000${data.Foto_Perfil}`);
+        }
+      } catch (err) {
+        console.error("Error al cargar perfil:", err);
+        alert("No se pudo cargar la información del perfil.");
       }
+    };
+
+    if (usuarioGuardado?.id) {
+      cargarDatos();
     }
   }, []);
 
@@ -42,8 +54,13 @@ const Perfil = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!userData.nombre.trim() || !userData.direccion.trim() || !userData.telefono.trim()) {
+      return alert("⚠️ Todos los campos son obligatorios.");
+    }
+
     try {
-      const res = await fetch(`http://localhost:5000/api/usuarios/${usuarioGuardado.id}`, {
+      const res = await fetch(`http://localhost:5000/api/auth/usuarios/${usuarioGuardado.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -51,12 +68,18 @@ const Perfil = () => {
         body: JSON.stringify(userData),
       });
 
+      const contentType = res.headers.get("content-type");
       const text = await res.text();
-      const data = text ? JSON.parse(text) : {};
-      if (!res.ok) throw new Error(data.message || "Error al actualizar");
-      alert("✅ Cambios guardados en la base de datos.");
+      const data = text && contentType.includes("application/json") ? JSON.parse(text) : {};
+
+      if (!res.ok) {
+        throw new Error(data.message || "Error al actualizar perfil.");
+      }
+
+      alert("✅ Cambios guardados correctamente.");
     } catch (err) {
-      alert("❌ Error: " + err.message);
+      console.error("❌ Error:", err);
+      alert("❌ Error al guardar los cambios.");
     }
   };
 
@@ -87,45 +110,6 @@ const Perfil = () => {
 
   const cambiarContraseña = () => {
     navigate("/cambiar-contraseña");
-  };
-
-  const handleGuardarCambios = async (e) => {
-    e.preventDefault();
-  
-    try {
-      const res = await fetch(`http://localhost:5000/api/auth/usuarios/${usuarioGuardado.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nombre: fullName,
-          direccion: direccion,
-          telefono: telefono,
-          notificacionesCorreo: notificarCorreo,
-          notificacionesSistema: notificarSistema,
-        }),
-      });
-  
-      const contentType = res.headers.get("content-type");
-  
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("❌ Error al guardar perfil:", text);
-        alert("Error al guardar los cambios.");
-        return;
-      }
-  
-      if (contentType && contentType.includes("application/json")) {
-        const data = await res.json();
-        alert(data.message || "Cambios guardados correctamente.");
-      } else {
-        alert("Respuesta inesperada del servidor.");
-      }
-    } catch (error) {
-      console.error("❌ Error de red:", error);
-      alert("Ocurrió un error al intentar guardar.");
-    }
   };
 
   return (
@@ -207,8 +191,8 @@ const Perfil = () => {
           </div>
 
           <div className="d-flex justify-content-between">
-          <button className="btn btn-success" onClick={handleGuardarCambios}>
-            💾 Guardar cambios
+            <button type="submit" className="btn btn-success">
+              💾 Guardar cambios
             </button>
             <button type="button" className="btn btn-warning" onClick={cambiarContraseña}>
               🔐 Cambiar contraseña
