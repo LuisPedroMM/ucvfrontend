@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../assets/icta.png";
 
 const AuthForm = ({ isLogin }) => {
@@ -7,6 +8,7 @@ const AuthForm = ({ isLogin }) => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState(null);
+  const [verPassword, setVerPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,7 +48,7 @@ const AuthForm = ({ isLogin }) => {
       if (isLogin) {
         if (data.token) {
           localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user)); // ✅ nuevo
+          localStorage.setItem("user", JSON.stringify(data.user));
           alert("Inicio de sesión exitoso");
           navigate("/dashboard");
         } else {
@@ -60,6 +62,17 @@ const AuthForm = ({ isLogin }) => {
       console.error(err);
       setError("No se pudo conectar con el servidor.");
     }
+  };
+
+  const inputStyle = { position: "relative" };
+  const iconStyle = {
+    position: "absolute",
+    top: "50%",
+    right: 10,
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
   };
 
   return (
@@ -102,25 +115,36 @@ const AuthForm = ({ isLogin }) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+
+            <div className="mb-3" style={inputStyle}>
               <input
-                type="password"
+                type={verPassword ? "text" : "password"}
                 className="form-control"
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={() => setVerPassword(!verPassword)}
+                style={iconStyle}
+              >
+                {verPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
+
             <button type="submit" className="btn btn-primary w-100">
               {isLogin ? "Entrar" : "Registrarse"}
             </button>
           </form>
 
-          <div className="mb-3 text-center">
-            <Link to="/forgot-password" className="small">
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
+          {isLogin && (
+            <div className="mb-3 text-center">
+              <Link to="/forgot-password" className="small">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+          )}
 
           <div className="mt-3">
             {isLogin ? (
