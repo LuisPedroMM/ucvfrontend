@@ -7,6 +7,7 @@ import Perfil from "./pages/Perfil";
 import CambiarContraseña from "./pages/CambiarContraseña";
 import PrivateRoute from "./components/PrivateRoute";
 import PrivateLayout from "./layouts/PrivateLayout";
+import ListaUsuarios from "./pages/ListaUsuarios";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/register" element={<AuthForm isLogin={false} />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/usuarios" element={<ListaUsuarios />} />
+
 
         {/* Rutas protegidas con navbar */}
         <Route

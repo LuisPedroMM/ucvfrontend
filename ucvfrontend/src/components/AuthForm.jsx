@@ -7,6 +7,7 @@ const AuthForm = ({ isLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [rol, setRol] = useState("usuario");
   const [error, setError] = useState(null);
   const [verPassword, setVerPassword] = useState(false);
 
@@ -27,7 +28,7 @@ const AuthForm = ({ isLogin }) => {
 
     const payload = isLogin
       ? { email, password }
-      : { fullName, email, password };
+      : { fullName, email, password, rol };
 
     try {
       const res = await fetch(url, {
@@ -106,6 +107,7 @@ const AuthForm = ({ isLogin }) => {
                 />
               </div>
             )}
+
             <div className="mb-3">
               <input
                 type="email"
@@ -132,6 +134,20 @@ const AuthForm = ({ isLogin }) => {
                 {verPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+
+            {/* ✅ Campo Rol para registro */}
+            {!isLogin && (
+              <div className="mb-3">
+                <select
+                  className="form-select"
+                  value={rol}
+                  onChange={(e) => setRol(e.target.value)}
+                >
+                  <option value="usuario">Usuario</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+            )}
 
             <button type="submit" className="btn btn-primary w-100">
               {isLogin ? "Entrar" : "Registrarse"}
