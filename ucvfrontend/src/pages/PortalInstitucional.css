@@ -1,0 +1,74 @@
+
+
+/* Logo */
+.logo-icta {
+  width: 130px;
+  height: auto;
+}
+
+/* Encabezado general */
+.navbar-icta {
+  background-color: #ffffff;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+/* Menú de navegación */
+.nav-links .nav-link {
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.4rem 1rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.nav-links .nav-link:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  border-radius: 20px;
+}
+
+/* Carrusel contenedor */
+.carousel-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0;
+}
+
+/* Item del carrusel */
+.carousel-item > div {
+  height: 320px; /* ✅ Altura más compacta */
+  border-radius: 25px;
+  background-color: #6c757d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Indicadores personalizados */
+.carousel-indicators [data-bs-target] {
+  background-color: #6f42c1;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin: 6px;
+  opacity: 0.7;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+}
+
+/* Responsive en pantallas pequeñas */
+@media (max-width: 768px) {
+  .carousel-item > div {
+    height: 240px;
+    font-size: 1rem;
+  }
+}
+
+ 

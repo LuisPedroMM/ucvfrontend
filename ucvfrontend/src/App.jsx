@@ -8,6 +8,7 @@ import CambiarContraseña from "./pages/CambiarContraseña";
 import PrivateRoute from "./components/PrivateRoute";
 import PrivateLayout from "./layouts/PrivateLayout";
 import ListaUsuarios from "./pages/ListaUsuarios";
+import PortalInstitucional from "./pages/PortalInstitucional";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/usuarios" element={<ListaUsuarios />} />
+        <Route path="/PortalInstitucional" element={<PortalInstitucional />} />
 
 
         {/* Rutas protegidas con navbar */}

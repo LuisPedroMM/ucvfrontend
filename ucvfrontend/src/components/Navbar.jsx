@@ -21,12 +21,21 @@ const NavBar = () => {
         >
           📘 UCV - Sistema
         </span>
-
+        
         {user && (
           <div className="d-flex align-items-center gap-3">
             <span className="text-white me-2">
               👋 Hola, <strong>{user.nombre}</strong>
             </span>
+
+            <button
+              className="btn btn-outline-light btn-sm"
+              onClick={() => navigate("/PortalInstitucional")}
+            >
+              🌐 Portal Institucional
+            </button>
+
+
 
             <button
               className="btn btn-outline-light btn-sm"
@@ -43,7 +52,6 @@ const NavBar = () => {
                 🧑‍💼 Usuarios
               </button>
             )}
-
             <button className="btn btn-light btn-sm" onClick={handleLogout}>
               🚪 Salir
             </button>

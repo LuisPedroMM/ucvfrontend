@@ -31,18 +31,12 @@ const Dashboard = () => {
           >
             🧑‍💼 Gestión de usuarios
           </button>
-          <button className="btn btn-outline-secondary mb-2">
-            📊 Ver reportes
-          </button>
         </>
       ) : (
         <>
           <h5>Acciones disponibles:</h5>
           <button className="btn btn-outline-success me-2 mb-2" onClick={() => navigate("/perfil")}>
             👤 Ver perfil
-          </button>
-          <button className="btn btn-outline-warning mb-2">
-            🔐 Cambiar contraseña
           </button>
         </>
       )}
