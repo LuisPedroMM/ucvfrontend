@@ -33,7 +33,7 @@ const PortalInstitucional = () => {
             </li>
             <li className="nav-item">
             <button
-                className="nav-link text-white bg-transparent border-0"
+                className="nav-link text-white"
                 onClick={() => navigate("/proyectos-investigacion")}
                 >
                     Proyectos de Investigación

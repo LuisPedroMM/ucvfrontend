@@ -30,7 +30,7 @@ const NavBar = () => {
 
             <button
               className="btn btn-outline-light btn-sm"
-              onClick={() => navigate("/PortalInstitucional")}
+              onClick={() => navigate("/portal-institucional")}
             >
               🌐 Portal Institucional
             </button>

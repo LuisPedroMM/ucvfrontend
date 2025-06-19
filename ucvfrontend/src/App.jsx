@@ -21,8 +21,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/portal-institucional" element={<PortalInstitucional />} />
-        <Route path="/proyectos-investigacion" element={<ProyectosInvestigacion />} />
-
+        
 
         {/* Rutas protegidas con navbar */}
         <Route
@@ -65,16 +64,17 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
-          path="/proyectos-investigacion"
-          element={
-            <PrivateRoute>
-              <PrivateLayout>
-                <ProyectosInvestigacion />
-              </PrivateLayout>
-            </PrivateRoute>
-          }
-        />
+  path="/proyectos-investigacion"
+  element={
+    <PrivateRoute>
+      <PrivateLayout>
+        <ProyectosInvestigacion />
+      </PrivateLayout>
+    </PrivateRoute>
+  }
+/>
 
         {/* Ruta por defecto */}
         <Route path="*" element={<AuthForm isLogin={true} />} />
