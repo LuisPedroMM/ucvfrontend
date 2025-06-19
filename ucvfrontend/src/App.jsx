@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import PrivateLayout from "./layouts/PrivateLayout";
 import ListaUsuarios from "./pages/ListaUsuarios";
 import PortalInstitucional from "./pages/PortalInstitucional";
+import ProyectosInvestigacion from "./pages/ProyectosInvestigacion";
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
         <Route path="/register" element={<AuthForm isLogin={false} />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/usuarios" element={<ListaUsuarios />} />
-        <Route path="/PortalInstitucional" element={<PortalInstitucional />} />
+        <Route path="/portal-institucional" element={<PortalInstitucional />} />
+        <Route path="/proyectos-investigacion" element={<ProyectosInvestigacion />} />
 
 
         {/* Rutas protegidas con navbar */}
@@ -50,6 +51,26 @@ function App() {
             <PrivateRoute>
               <PrivateLayout>
                 <CambiarContraseña />
+              </PrivateLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <PrivateRoute>
+              <PrivateLayout>
+                <ListaUsuarios />
+              </PrivateLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/proyectos-investigacion"
+          element={
+            <PrivateRoute>
+              <PrivateLayout>
+                <ProyectosInvestigacion />
               </PrivateLayout>
             </PrivateRoute>
           }

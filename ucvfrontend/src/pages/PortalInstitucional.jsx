@@ -1,8 +1,15 @@
 import React from "react";
-import "./PortalInstitucional.css"; // Asegúrate de que este archivo exista y tenga los estilos necesarios
+import { useNavigate } from "react-router-dom";
+import "./PortalInstitucional.css";
 import logo from "../assets/icta.png";
 
 const PortalInstitucional = () => {
+  const navigate = useNavigate();
+
+  const irAProyectos = () => {
+  navigate("/proyectos-investigacion");
+};
+
   return (
     <div className="portal-container">
       {/* Encabezado */}
@@ -17,7 +24,7 @@ const PortalInstitucional = () => {
             <small className="text-muted">Unidad de Cooperación y Vinculación</small>
           </div>
         </div>
-        
+
         {/* Menú de navegación */}
         <nav className="nav-links mt-3">
           <ul className="nav justify-content-center bg-dark rounded-pill p-2">
@@ -25,7 +32,12 @@ const PortalInstitucional = () => {
               <a className="nav-link text-white" href="#">Inicio</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-white" href="#">Proyectos de investigación</a>
+            <button
+                className="nav-link text-white bg-transparent border-0"
+                onClick={() => navigate("/proyectos-investigacion")}
+                >
+                    Proyectos de Investigación
+            </button>
             </li>
             <li className="nav-item">
               <a className="nav-link text-white" href="#">Proyectos de Infraestructura</a>
@@ -49,7 +61,7 @@ const PortalInstitucional = () => {
         </nav>
       </header>
 
-      {/* Carrusel (sin imágenes reales aún) */}
+      {/* Carrusel */}
       <main className="portal-contenido container mt-4">
         <div id="carouselBanner" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner rounded shadow">
