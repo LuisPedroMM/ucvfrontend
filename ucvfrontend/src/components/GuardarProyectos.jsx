@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
-import html2pdf from "html2pdf.js";
-import "./ProyectosInvestigacion.css";
 
-const proyectosIniciales = [
-{
-    numero: "Pcol-01-2025",
-    coordinador: "Leopoldo Calel Mus",
-    asociados: "Edilsar Mazariegos Hernández",
-    nombre: "Enfrentando retos para mejorar la productividad, calidad, genética y contribuciones ambientales de los sistemas modernos de cacao en América Latina",
-    cadena: "Cacao",
-    region: "Norte/Sur",
-    cooperante: "KolFACI",
-    entidad: "FUNDIT",
-  },
-  {
+const GuardarProyectos = () => {
+  const [mensaje, setMensaje] = useState("");
+
+  const proyectos = [
+    {
+      numero: "Pcol-01-2025",
+      coordinador: "Leopoldo Calel Mus",
+      asociados: "Edilsar Mazariegos Hernández",
+      nombre:"Enfrentando retos para mejorar la productividad, calidad, genética y contribuciones ambientales de los sistemas modernos de cacao en América Latina",
+      cadena: "Cacao",
+      region: "Norte/Sur",
+      cooperante: "KolFACI",
+      entidad: "FUNDIT",
+    },
+    
+    {
     numero: "Pcol-02-2025",
     coordinador: "Aroldo Roderico García Vásquez",
     asociados: "Edilsar Mazariegos Hernández, Leopoldo Calel Mus",
@@ -24,6 +26,7 @@ const proyectosIniciales = [
     cooperante: "KolFACI",
     entidad: "FUNDIT",
   },
+
   {
     numero: "Pcol-03-2025",
     coordinador: "Edilsar Mazariegos Hernández",
@@ -167,7 +170,7 @@ const proyectosIniciales = [
   {
     numero: "Pcol-17-2025",
     coordinador: "Astrid Judith Racancoj Coyoy",
-    asociados: "Angela Nadezhda Nicte Miranda Mijangos",
+    asociados: "Angela Nadezhda Nicte Miranda Mijangos,",
     nombre: "Diagnóstico del comportamiento poblacional de Megalurothripsusitatus en el cultivo del frijol y generación de tecnología para su manejo.",
     cadena: "Frijol",
     region: "Occidente",
@@ -224,165 +227,29 @@ const proyectosIniciales = [
     cooperante: "KoLFACI",
     entidad: "IICA",
   },
-];
+  ];
 
-const ProyectosInvestigacion = () => {
-  const [proyectos, setProyectos] = useState(proyectosIniciales);
-  const [proyectoActual, setProyectoActual] = useState(null);
-  const [modo, setModo] = useState("agregar");
-
-  const abrirModal = (modo, proyecto = null) => {
-    setModo(modo);
-    setProyectoActual(proyecto);
-    const modal = new bootstrap.Modal(document.getElementById("modalProyecto"));
-    modal.show();
-  };
-
-  const guardarMasivo = async () => {
+  const guardarProyectos = async () => {
     try {
-      await axios.post("http://localhost:5000/api/proyectos/guardar-masivo", { proyectos });
-      alert("✅ Proyectos guardados en la base de datos.");
+      for (const p of proyectos) {
+        await axios.post("http://localhost:5000/api/proyectos/crear", p);
+      }
+      setMensaje("✅ Proyectos guardados correctamente.");
     } catch (error) {
-      console.error(error);
-      alert("❌ Error al guardar.");
+      console.error("Error:", error);
+      setMensaje("❌ Error al guardar los proyectos.");
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const nuevo = Object.fromEntries(new FormData(e.target).entries());
-
-    const actualizado = modo === "editar"
-      ? proyectos.map(p => p.numero === proyectoActual.numero ? nuevo : p)
-      : [...proyectos, nuevo];
-
-    setProyectos(actualizado);
-    bootstrap.Modal.getInstance(document.getElementById("modalProyecto")).hide();
-  };
-
-  const eliminarProyecto = (numero) => {
-    if (confirm("¿Eliminar este proyecto?")) {
-      setProyectos(proyectos.filter(p => p.numero !== numero));
-    }
-  };
-
-  const exportarPDF = () => {
-    const element = document.getElementById("tabla-proyectos");
-    html2pdf().from(element).set({
-      margin: 0.3,
-      filename: "proyectos-investigacion.pdf",
-      html2canvas: { scale: 2 },
-      jsPDF: { format: "a3", orientation: "landscape" }
-    }).save();
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4 text-dark">Proyectos por Colaboración Interinstitucional 2025</h2>
-
-      <div className="d-flex justify-content-between mb-3">
-        <button className="btn btn-success" onClick={() => abrirModal("agregar")}>Agregar Proyecto</button>
-        <div>
-          <button className="btn btn-outline-primary me-2" onClick={exportarPDF}>Exportar PDF</button>
-          <button className="btn btn-outline-success" onClick={guardarMasivo}>Guardar en BD</button>
-        </div>
-      </div>
-
-      <div className="table-responsive" id="tabla-proyectos">
-        <table className="table table-bordered table-striped table-hover align-middle shadow-sm">
-          <thead className="table-dark text-center">
-            <tr>
-              <th>No. Proyecto</th>
-              <th>Coordinador</th>
-              <th>Asociados</th>
-              <th>Nombre</th>
-              <th>Cadena</th>
-              <th>Región</th>
-              <th>Cooperante</th>
-              <th>Entidad</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {proyectos.map((p, i) => (
-              <tr key={i}>
-                <td>{p.numero}</td>
-                <td>{p.coordinador}</td>
-                <td>{p.asociados}</td>
-                <td>{p.nombre}</td>
-                <td>{p.cadena}</td>
-                <td>{p.region}</td>
-                <td>{p.cooperante}</td>
-                <td>{p.entidad}</td>
-                <td>
-                  <button className="btn btn-sm btn-primary me-2" onClick={() => abrirModal("editar", p)}>Editar</button>
-                  <button className="btn btn-sm btn-danger" onClick={() => eliminarProyecto(p.numero)}>Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal */}
-      <div className="modal fade" id="modalProyecto" tabIndex="-1">
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content">
-            <form onSubmit={handleSubmit}>
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  {modo === "editar" ? "Editar Proyecto" : "Agregar Proyecto"}
-                </h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" />
-              </div>
-              <div className="modal-body">
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label">Número</label>
-                    <input name="numero" defaultValue={proyectoActual?.numero || ""} className="form-control" required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Coordinador</label>
-                    <input name="coordinador" defaultValue={proyectoActual?.coordinador || ""} className="form-control" required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Asociados</label>
-                    <input name="asociados" defaultValue={proyectoActual?.asociados || ""} className="form-control" />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Nombre</label>
-                    <textarea name="nombre" defaultValue={proyectoActual?.nombre || ""} className="form-control" rows={2} required />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Cadena</label>
-                    <input name="cadena" defaultValue={proyectoActual?.cadena || ""} className="form-control" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Región</label>
-                    <input name="region" defaultValue={proyectoActual?.region || ""} className="form-control" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Cooperante</label>
-                    <input name="cooperante" defaultValue={proyectoActual?.cooperante || ""} className="form-control" />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Entidad</label>
-                    <input name="entidad" defaultValue={proyectoActual?.entidad || ""} className="form-control" />
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                <button className="btn btn-primary" type="submit">
-                  {modo === "editar" ? "Actualizar" : "Guardar"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+    <div className="container mt-4">
+      <h4>Guardar Proyectos en Base de Datos</h4>
+      <button className="btn btn-success" onClick={guardarProyectos}>
+        Guardar 22 Proyectos
+      </button>
+      {mensaje && <p className="mt-3">{mensaje}</p>}
     </div>
   );
 };
 
-export default ProyectosInvestigacion;
+export default GuardarProyectos;

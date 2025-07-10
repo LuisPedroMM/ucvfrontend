@@ -10,6 +10,7 @@ import PrivateLayout from "./layouts/PrivateLayout";
 import ListaUsuarios from "./pages/ListaUsuarios";
 import PortalInstitucional from "./pages/PortalInstitucional";
 import ProyectosInvestigacion from "./pages/ProyectosInvestigacion";
+import GuardarProyectos from "./components/GuardarProyectos";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/portal-institucional" element={<PortalInstitucional />} />
+        
         
 
         {/* Rutas protegidas con navbar */}
@@ -75,6 +77,17 @@ function App() {
     </PrivateRoute>
   }
 />
+
+<Route
+          path="/guardar-proyectos"
+          element={
+            <PrivateRoute>
+              <PrivateLayout>
+                <GuardarProyectos />
+              </PrivateLayout>
+            </PrivateRoute>
+          }
+        />
 
         {/* Ruta por defecto */}
         <Route path="*" element={<AuthForm isLogin={true} />} />
