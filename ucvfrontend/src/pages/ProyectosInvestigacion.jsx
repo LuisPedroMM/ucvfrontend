@@ -228,6 +228,9 @@ const proyectosIniciales = [
 
 const ProyectosInvestigacion = () => {
   const [proyectos, setProyectos] = useState(proyectosIniciales);
+  const [busqueda, setBusqueda] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+  const proyectosPorPagina = 10;
   const [proyectoActual, setProyectoActual] = useState(null);
   const [modo, setModo] = useState("agregar");
 
@@ -267,21 +270,48 @@ const ProyectosInvestigacion = () => {
   };
 
   const exportarPDF = () => {
+    const acciones = document.querySelectorAll(".col-acciones");
+    acciones.forEach(el => el.classList.add("d-none"));
+
     const element = document.getElementById("tabla-proyectos");
     html2pdf().from(element).set({
       margin: 0.3,
       filename: "proyectos-investigacion.pdf",
       html2canvas: { scale: 2 },
       jsPDF: { format: "a3", orientation: "landscape" }
-    }).save();
+    }).save().then(() => {
+      acciones.forEach(el => el.classList.remove("d-none"));
+    });
   };
+
+  const filtrarProyectos = proyectos.filter(p =>
+    Object.values(p).some(valor =>
+      valor?.toLowerCase?.().includes(busqueda.toLowerCase())
+    )
+  );
+
+  const totalPaginas = Math.ceil(filtrarProyectos.length / proyectosPorPagina);
+  const proyectosPagina = filtrarProyectos.slice(
+    (paginaActual - 1) * proyectosPorPagina,
+    paginaActual * proyectosPorPagina
+  );
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4 text-dark">Proyectos por Colaboración Interinstitucional 2025</h2>
 
-      <div className="d-flex justify-content-between mb-3">
+      <div className="d-flex justify-content-between mb-3 align-items-center flex-wrap gap-2">
         <button className="btn btn-success" onClick={() => abrirModal("agregar")}>Agregar Proyecto</button>
+        <input
+          type="text"
+          placeholder="🔎 Buscar por cualquier campo..."
+          className="form-control w-50"
+          value={busqueda}
+          onChange={(e) => {
+            setBusqueda(e.target.value);
+            setPaginaActual(1);
+          }}
+        />
         <div>
           <button className="btn btn-outline-primary me-2" onClick={exportarPDF}>Exportar PDF</button>
           <button className="btn btn-outline-success" onClick={guardarMasivo}>Guardar en BD</button>
@@ -300,11 +330,11 @@ const ProyectosInvestigacion = () => {
               <th>Región</th>
               <th>Cooperante</th>
               <th>Entidad</th>
-              <th>Acciones</th>
+              <th className="col-acciones">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {proyectos.map((p, i) => (
+            {proyectosPagina.map((p, i) => (
               <tr key={i}>
                 <td>{p.numero}</td>
                 <td>{p.coordinador}</td>
@@ -314,7 +344,7 @@ const ProyectosInvestigacion = () => {
                 <td>{p.region}</td>
                 <td>{p.cooperante}</td>
                 <td>{p.entidad}</td>
-                <td>
+                <td className="col-acciones">
                   <button className="btn btn-sm btn-primary me-2" onClick={() => abrirModal("editar", p)}>Editar</button>
                   <button className="btn btn-sm btn-danger" onClick={() => eliminarProyecto(p.numero)}>Eliminar</button>
                 </td>
@@ -323,6 +353,19 @@ const ProyectosInvestigacion = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Paginación */}
+      <nav className="mt-3 d-flex justify-content-center">
+        <ul className="pagination">
+          {[...Array(totalPaginas)].map((_, i) => (
+            <li key={i} className={`page-item ${paginaActual === i + 1 ? "active" : ""}`}>
+              <button className="page-link" onClick={() => setPaginaActual(i + 1)}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* Modal */}
       <div className="modal fade" id="modalProyecto" tabIndex="-1">
