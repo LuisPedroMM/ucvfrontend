@@ -16,8 +16,6 @@ const NavBar = () => {
       <div className="container-fluid d-flex justify-content-between">
         <span
           className="navbar-brand"
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/dashboard")}
         >
            UCV - Sistema
         </span>
@@ -27,34 +25,6 @@ const NavBar = () => {
             <span className="text-white me-2">
               👋 Hola, <strong>{user.nombre}</strong>
             </span>
-
-            <button
-              className="btn btn-outline-light btn-sm"
-              onClick={() => navigate("/portal-institucional")}
-            >
-              🌐 Portal Institucional
-            </button>
-
-
-
-            <button
-              className="btn btn-outline-light btn-sm"
-              onClick={() => navigate("/perfil")}
-            >
-              👤 Perfil
-            </button>
-
-            {user.rol === "admin" && (
-              <button
-                className="btn btn-outline-warning btn-sm"
-                onClick={() => navigate("/usuarios")}
-              >
-                🧑‍💼 Usuarios
-              </button>
-            )}
-            <button className="btn btn-light btn-sm" onClick={handleLogout}>
-              🚪 Salir
-            </button>
           </div>
         )}
       </div>

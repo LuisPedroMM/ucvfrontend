@@ -3,7 +3,6 @@ import AuthForm from "./components/AuthForm";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import Dashboard from "./pages/Dashboard";
-import Perfil from "./pages/Perfil";
 import CambiarContraseña from "./pages/CambiarContraseña";
 import PrivateRoute from "./components/PrivateRoute";
 import PrivateLayout from "./layouts/PrivateLayout";
@@ -11,6 +10,7 @@ import ListaUsuarios from "./pages/ListaUsuarios";
 import PortalInstitucional from "./pages/PortalInstitucional";
 import ProyectosInvestigacion from "./pages/ProyectosInvestigacion";
 import GuardarProyectos from "./components/GuardarProyectos";
+
 
 function App() {
   return (
@@ -36,16 +36,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/perfil"
-          element={
-            <PrivateRoute>
-              <PrivateLayout>
-                <Perfil />
-              </PrivateLayout>
-            </PrivateRoute>
-          }
-        />
+        
         <Route
           path="/cambiar-contraseña"
           element={
