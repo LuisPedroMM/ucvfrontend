@@ -34,11 +34,11 @@ const PortalInstitucional = () => {
                 Proyectos de Investigación
               </button>
             </li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Proyectos de Infraestructura</a></li>
+            <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Investigación</a></li>
+            <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Infraestructura</a></li>
             <li className="nav-item"><a className="nav-link text-white" href="#">Proyectos Generados ICTA</a></li>
             <li className="nav-item"><a className="nav-link text-white" href="#">Presupuesto de Cooperación Externa</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Formatos KolFaci</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Formatos Administrativos</a></li>
+            <li className="nav-item"><a className="nav-link text-white" href="#">Formatos</a></li>
             <li className="nav-item"><a className="nav-link text-white" href="#">Contáctanos</a></li>
           </ul>
         </nav>
