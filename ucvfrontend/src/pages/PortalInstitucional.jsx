@@ -1,49 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import PortalHeader from "../components/PortalHeader";
 import "./PortalInstitucional.css";
-import logo from "../assets/icta.png";
 
 
 const PortalInstitucional = () => {
-  const navigate = useNavigate();
-
-  const irAProyectos = () => {
-    navigate("/proyectos-investigacion");
-  };
-
   return (
     <div className="portal-container">
-      {/* Encabezado */}
-      <header className="navbar-icta py-4">
-        <div className="container position-relative d-flex align-items-center justify-content-start">
-          <img src={logo} alt="ICTA" className="logo-icta me-3" />
-          <div className="header-titles position-absolute top-50 start-50 translate-middle text-center">
-            <h5 className="fw-bold text-success mb-0">
-              Instituto de Ciencia y Tecnología Agrícolas
-            </h5>
-            <small className="text-muted">Unidad de Cooperación y Vinculación</small>
-          </div>
-        </div>
-
-        {/* Menú de navegación */}
-        <nav className="nav-links mt-3">
-          <ul className="nav justify-content-center bg-dark rounded-pill p-2">
-            <li className="nav-item"><a className="nav-link text-white" href="#">Inicio</a></li>
-            <li className="nav-item">
-              <button className="nav-link text-white" onClick={irAProyectos}>
-                Proyectos de Investigación
-              </button>
-            </li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Investigación</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Infraestructura</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Proyectos Generados ICTA</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Presupuesto de Cooperación Externa</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Formatos</a></li>
-            <li className="nav-item"><a className="nav-link text-white" href="#">Contáctanos</a></li>
-          </ul>
-        </nav>
-      </header>
-
       {/* Carrusel */}
       <main className="portal-contenido container mt-4">
         <div
@@ -64,25 +26,25 @@ const PortalInstitucional = () => {
           <div className="carousel-inner rounded-4 shadow" style={{ overflow: "hidden" }}>
             <div className="carousel-item active">
               <img
-                src="/carrusel/slide1.png"
+                src="/carrusel/slid1.jpeg"
                 className="d-block w-100"
-                style={{ height: 360, objectFit: "cover" }}
+                style={{ height: 400, objectFit: "fill" }}
                 alt="Carrusel 1"
               />
             </div>
             <div className="carousel-item">
               <img
-                src="/carrusel/slide2.png"
+                src="/carrusel/slid2.jpg"
                 className="d-block w-100"
-                style={{ height: 360, objectFit: "cover" }}
+                style={{ height: 400, objectFit: "fill" }}
                 alt="Carrusel 2"
               />
             </div>
             <div className="carousel-item">
               <img
-                src="/carrusel/slide3.png"
+                src="/carrusel/slid3.jpeg"
                 className="d-block w-100"
-                style={{ height: 360, objectFit: "cover" }}
+                style={{ height: 400, objectFit: "fill" }}
                 alt="Carrusel 3"
               />
             </div>

@@ -21,11 +21,20 @@ function App() {
         <Route path="/register" element={<AuthForm isLogin={false} />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/portal-institucional" element={<PortalInstitucional />} />
         
         
 
         {/* Rutas protegidas con navbar */}
+        <Route
+          path="/portal-institucional"
+          element={
+            <PrivateRoute>
+              <PrivateLayout>
+                <PortalInstitucional />
+              </PrivateLayout>
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
