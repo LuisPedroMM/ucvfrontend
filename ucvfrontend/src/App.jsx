@@ -9,6 +9,8 @@ import PrivateLayout from "./layouts/PrivateLayout";
 import ListaUsuarios from "./pages/ListaUsuarios";
 import PortalInstitucional from "./pages/PortalInstitucional";
 import ProyectosInvestigacion from "./pages/ProyectosInvestigacion";
+import EjecucionFinancieraProyectosInvestigacion from "./pages/EjecucionFinancieraProyectosInvestigacion";
+import EjecucionFinancieraProyectosInfraestructura from "./pages/EjecucionFinancieraProyectosInfraestructura";
 import GuardarProyectos from "./components/GuardarProyectos";
 
 
@@ -68,17 +70,39 @@ function App() {
         />
         
         <Route
-  path="/proyectos-investigacion"
-  element={
-    <PrivateRoute>
-      <PrivateLayout>
-        <ProyectosInvestigacion />
-      </PrivateLayout>
-    </PrivateRoute>
-  }
-/>
+   path="/proyectos-investigacion"
+   element={
+     <PrivateRoute>
+       <PrivateLayout>
+         <ProyectosInvestigacion />
+       </PrivateLayout>
+     </PrivateRoute>
+   }
+ />
 
-<Route
+ <Route
+    path="/ejecucion-financiera-proyectos-investigacion"
+    element={
+      <PrivateRoute>
+        <PrivateLayout>
+          <EjecucionFinancieraProyectosInvestigacion />
+        </PrivateLayout>
+      </PrivateRoute>
+    }
+  />
+
+  <Route
+    path="/ejecucion-financiera-proyectos-infraestructura"
+    element={
+      <PrivateRoute>
+        <PrivateLayout>
+          <EjecucionFinancieraProyectosInfraestructura />
+        </PrivateLayout>
+      </PrivateRoute>
+    }
+  />
+
+ <Route
           path="/guardar-proyectos"
           element={
             <PrivateRoute>

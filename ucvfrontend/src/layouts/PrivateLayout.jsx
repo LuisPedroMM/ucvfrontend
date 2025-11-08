@@ -5,7 +5,7 @@ import PortalHeader from "../components/PortalHeader";
 
 const PrivateLayout = ({ children }) => {
   const location = useLocation();
-  const isPortalPage = location.pathname === "/portal-institucional" || location.pathname === "/proyectos-investigacion" || location.pathname === "/guardar-proyectos";
+  const isPortalPage = location.pathname === "/portal-institucional" || location.pathname === "/proyectos-investigacion" || location.pathname === "/guardar-proyectos" || location.pathname === "/ejecucion-financiera-proyectos-investigacion" || location.pathname === "/ejecucion-financiera-proyectos-infraestructura";
 
   return (
     <>

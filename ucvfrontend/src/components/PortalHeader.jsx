@@ -14,6 +14,10 @@ const PortalHeader = () => {
     navigate("/proyectos-investigacion");
   };
 
+  const irAEjecucionInfra = () => {
+    navigate("/ejecucion-financiera-proyectos-infraestructura");
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -56,8 +60,16 @@ const PortalHeader = () => {
               Proyectos de Investigación
             </button>
           </li>
-          <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Investigación</a></li>
-          <li className="nav-item"><a className="nav-link text-white" href="#">Ejecución Financiera Proyectos de Infraestructura</a></li>
+          <li className="nav-item">
+            <button className="nav-link text-white" onClick={() => navigate("/ejecucion-financiera-proyectos-investigacion")}>
+              Ejecución Financiera Proyectos de Investigación
+            </button>
+          </li>
+          <li className="nav-item">
+            <button className="nav-link text-white" onClick={irAEjecucionInfra}>
+              Ejecución Financiera Proyectos de Infraestructura
+            </button>
+          </li>
           <li className="nav-item"><a className="nav-link text-white" href="#">Proyectos Generados ICTA</a></li>
           <li className="nav-item"><a className="nav-link text-white" href="#">Presupuesto de Cooperación Externa</a></li>
           <li className="nav-item"><a className="nav-link text-white" href="#">Formatos</a></li>
