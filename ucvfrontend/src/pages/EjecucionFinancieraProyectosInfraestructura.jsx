@@ -30,6 +30,7 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
   const cargarRegistros = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/ejecucion-financiera-infra");
+      console.log("Registros cargados:", response.data);
       setRegistros(response.data);
     } catch (error) {
       console.error("Error al cargar registros:", error);
@@ -72,11 +73,16 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
+    // Mantener el presupuesto con formato (solo remover Q y espacios, pero mantener comas)
+    const presupuestoLimpio = formData.presupuesto.replace(/[Q\s]/g, "").trim();
+    console.log("Presupuesto original:", formData.presupuesto);
+    console.log("Presupuesto limpio:", presupuestoLimpio);
+
     // Agregar campos de texto
     formDataToSend.append("fuente", formData.fuente);
     formDataToSend.append("proyecto_descrip", formData.proyecto_descrip);
     formDataToSend.append("anio", formData.anio);
-    formDataToSend.append("presupuesto", formData.presupuesto);
+    formDataToSend.append("presupuesto", presupuestoLimpio);
 
     // Agregar imágenes nuevas
     imagenesSeleccionadas.forEach((file, index) => {
@@ -202,13 +208,14 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
             </tr>
           </thead>
           <tbody>
-            {registrosPagina.map((r, i) => (
-              <tr key={i}>
-                <td>{r.proyecto_descrip}</td>
-                <td className="text-end">Q {(r.presupuesto || 0).toLocaleString()}</td>
-                <td>{r.fuente}</td>
-                <td className="text-center">{r.anio}</td>
-                <td className="text-center">
+            {registrosPagina.map((r, i) => {
+              return (
+                <tr key={i}>
+                  <td>{r.proyecto_descrip}</td>
+                  <td className="text-end">Q {r.presupuesto}</td>
+                  <td>{r.fuente}</td>
+                  <td className="text-center">{r.anio}</td>
+                    <td className="text-center">
                   {r.imagenes && r.imagenes.length > 0 ? (
                     <button
                       className="btn btn-sm btn-info"
@@ -225,7 +232,8 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
                   <button className="btn btn-sm btn-danger" onClick={() => eliminarRegistro(r.id)}>Eliminar</button>
                 </td>
               </tr>
-            ))}
+            );
+          })}
           </tbody>
         </table>
       </div>
@@ -273,7 +281,7 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
                     <input name="presupuesto" type="text" value={formData.presupuesto} onChange={handleInputChange} className="form-control" />
                   </div>
                   <div className="col-12">
-                    <label className="form-label">Imágenes</label>
+                    <label className="form-label">Imágenes (puedes seleccionar múltiples)</label>
                     <input
                       type="file"
                       multiple
@@ -281,6 +289,7 @@ const EjecucionFinancieraProyectosInfraestructura = () => {
                       onChange={handleImagenesChange}
                       className="form-control"
                     />
+                    <small className="text-muted">Selecciona una o más imágenes (máximo 10). Formatos permitidos: JPG, PNG, GIF.</small>
                     {modo === "editar" && imagenesActuales.length > 0 && (
                       <div className="mt-2">
                         <small className="text-muted">Imágenes actuales:</small>
